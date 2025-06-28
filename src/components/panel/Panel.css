@@ -1,0 +1,10 @@
+aside {
+  width: 300px;
+  height: 100%;
+  background: var(--panel-bg);
+  color: var(--panel-text);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: var(--shadow-low);
+}
