@@ -7,4 +7,5 @@ body {
   position: absolute;
   top: 48px;
   left: 0px;
+  z-index: -1;
 }
