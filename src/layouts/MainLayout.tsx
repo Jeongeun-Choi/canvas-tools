@@ -1,15 +1,33 @@
-import { useState, type PropsWithChildren } from "react";
+import { useContext, useState, type PropsWithChildren } from "react";
 import GNB from "../components/gnb/GNB";
 import Panel from "../components/panel/Panel";
 import "./MainLayout.css";
+import Rect from "../components/rect/Rect";
+import { CustomCanvasContext } from "../components/custom-canvas/context";
 
 const componentList = [{ name: "CSR" }, { name: "AHB" }, { name: "AXI" }];
 export default function MainLayout({ children }: PropsWithChildren) {
   const [foldingLeftPanel, setFoldingLeftPanel] = useState(false);
+  const { customCanvas } = useContext(CustomCanvasContext);
 
   const handleFoldingPanel = () => {
     setFoldingLeftPanel((prev) => !prev);
   };
+
+  const handleCreateRect = () => {
+    const x = Math.random() * 100 + 300;
+    const y = Math.random() * 100 + 48;
+    const rect = new Rect({
+      x: x,
+      y: y,
+      width: 200,
+      height: 200,
+      id: window.crypto.randomUUID(),
+    });
+
+    customCanvas?.add(rect);
+  };
+
   return (
     <div>
       <GNB />
@@ -18,7 +36,7 @@ export default function MainLayout({ children }: PropsWithChildren) {
           <Panel>
             {componentList.map((component) => (
               <li>
-                <button>{component.name}</button>
+                <button onClick={handleCreateRect}>{component.name}</button>
               </li>
             ))}
           </Panel>
