@@ -4,6 +4,7 @@ import Panel from "../components/panel/Panel";
 import "./MainLayout.css";
 import Rect from "../components/rect/Rect";
 import { CustomCanvasContext } from "../components/custom-canvas/context";
+import Circle from "../components/circle/Circle";
 
 const componentList = [{ name: "CSR" }, { name: "AHB" }, { name: "AXI" }];
 export default function MainLayout({ children }: PropsWithChildren) {
@@ -28,6 +29,21 @@ export default function MainLayout({ children }: PropsWithChildren) {
     customCanvas?.add(rect);
   };
 
+  const handleCreateCircle = () => {
+    const x = Math.random() * 100 + 300;
+    const y = Math.random() * 100 + 48;
+    const circle = new Circle({
+      x,
+      y,
+      width: 200,
+      height: 200,
+      id: window.crypto.randomUUID(),
+      fill: "#ffb3ba",
+    });
+
+    customCanvas?.add(circle);
+  };
+
   return (
     <div>
       <GNB />
@@ -36,7 +52,7 @@ export default function MainLayout({ children }: PropsWithChildren) {
           <Panel>
             {componentList.map((component) => (
               <li>
-                <button onClick={handleCreateRect}>{component.name}</button>
+                <button onClick={handleCreateCircle}>{component.name}</button>
               </li>
             ))}
           </Panel>
