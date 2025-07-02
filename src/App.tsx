@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { CustomCanvasContext } from "./components/custom-canvas/context";
 import MainLayout from "./layouts/MainLayout";
-import Main from "./pages/Main";
-import CustomCanvas from "./components/custom-canvas/CustomCanvas";
+import CanvasView from "./features/canvas/components/CanvasView";
+import CustomCanvas from "./features/canvas/models/CustomCanvas";
+import { CustomCanvasContext } from "./features/canvas/contexts/context";
 
 function App() {
   const [customCanvas, setCustomCanvas] = useState<CustomCanvas | null>(null);
@@ -19,7 +19,7 @@ function App() {
   return (
     <CustomCanvasContext.Provider value={{ customCanvas }}>
       <MainLayout>
-        <Main ref={canvasRef} />
+        <CanvasView ref={canvasRef} />
       </MainLayout>
     </CustomCanvasContext.Provider>
   );
