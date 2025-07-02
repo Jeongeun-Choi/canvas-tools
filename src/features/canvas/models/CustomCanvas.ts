@@ -3,8 +3,8 @@ interface Shape {
   id: string;
   x: number;
   y: number;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   draw: (ctx: CanvasRenderingContext2D | null) => void;
 }
 

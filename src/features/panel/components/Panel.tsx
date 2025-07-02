@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react";
-import "./Panel.css";
+import "../styles/Panel.css";
 
 export default function Panel({ children }: PropsWithChildren) {
   return (

@@ -1,47 +1,25 @@
-import { useContext, useState, type PropsWithChildren } from "react";
+import { useSetAtom } from "jotai";
+import { useState, type MouseEvent, type PropsWithChildren } from "react";
 import GNB from "../features/gnb/components/GNB";
 import "./MainLayout.css";
-import { CustomCanvasContext } from "../features/canvas/contexts/context";
-import Rect from "../features/canvas/models/Rect";
-import Circle from "../features/canvas/models/Circle";
 import Panel from "../features/panel/components/Panel";
+import { setSelectedPanelAtom } from "../atoms/panel/atom";
 
-const componentList = [{ name: "CSR" }, { name: "AHB" }, { name: "AXI" }];
+const componentList = [
+  { name: "Rect", type: "rect" },
+  { name: "Circle", type: "circle" },
+];
+
 export default function MainLayout({ children }: PropsWithChildren) {
   const [foldingLeftPanel, setFoldingLeftPanel] = useState(false);
-  const { customCanvas } = useContext(CustomCanvasContext);
+  const setSelectedPanel = useSetAtom(setSelectedPanelAtom);
 
   const handleFoldingPanel = () => {
     setFoldingLeftPanel((prev) => !prev);
   };
 
-  const handleCreateRect = () => {
-    const x = Math.random() * 100 + 300;
-    const y = Math.random() * 100 + 48;
-    const rect = new Rect({
-      x: x,
-      y: y,
-      width: 200,
-      height: 200,
-      id: window.crypto.randomUUID(),
-    });
-
-    customCanvas?.add(rect);
-  };
-
-  const handleCreateCircle = () => {
-    const x = Math.random() * 100 + 300;
-    const y = Math.random() * 100 + 48;
-    const circle = new Circle({
-      x,
-      y,
-      width: 200,
-      height: 200,
-      id: window.crypto.randomUUID(),
-      fill: "#ffb3ba",
-    });
-
-    customCanvas?.add(circle);
+  const handleClickButton = (event: MouseEvent<HTMLButtonElement>) => {
+    setSelectedPanel(event.currentTarget.dataset.type || "");
   };
 
   return (
@@ -52,7 +30,9 @@ export default function MainLayout({ children }: PropsWithChildren) {
           <Panel>
             {componentList.map((component) => (
               <li>
-                <button onClick={handleCreateCircle}>{component.name}</button>
+                <button data-type={component.type} onClick={handleClickButton}>
+                  {component.name}
+                </button>
               </li>
             ))}
           </Panel>

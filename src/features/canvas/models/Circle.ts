@@ -2,8 +2,6 @@ interface CircleProps {
   id: string;
   x: number;
   y: number;
-  width: number;
-  height: number;
   radius?: number;
   fill?: string;
   stroke?: string;
@@ -16,8 +14,6 @@ class Circle {
   id: string;
   x: number;
   y: number;
-  width: number;
-  height: number;
   type: string;
   radius: number;
   fill: string;
@@ -27,8 +23,6 @@ class Circle {
     id,
     x,
     y,
-    width,
-    height,
     type,
     radius,
     fill,
@@ -41,8 +35,6 @@ class Circle {
     this.y = y;
     this.radius = radius || 50;
     this.type = type || "circle";
-    this.width = width;
-    this.height = height;
     this.fill = fill || "#000000";
     this.stroke = stroke || "#000000";
   }
