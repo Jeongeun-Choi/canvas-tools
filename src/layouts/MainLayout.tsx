@@ -1,10 +1,10 @@
 import { useContext, useState, type PropsWithChildren } from "react";
-import GNB from "../components/gnb/GNB";
-import Panel from "../components/panel/Panel";
+import GNB from "../features/gnb/components/GNB";
 import "./MainLayout.css";
-import Rect from "../components/rect/Rect";
-import { CustomCanvasContext } from "../components/custom-canvas/context";
-import Circle from "../components/circle/Circle";
+import { CustomCanvasContext } from "../features/canvas/contexts/context";
+import Rect from "../features/canvas/models/Rect";
+import Circle from "../features/canvas/models/Circle";
+import Panel from "../features/panel/components/Panel";
 
 const componentList = [{ name: "CSR" }, { name: "AHB" }, { name: "AXI" }];
 export default function MainLayout({ children }: PropsWithChildren) {
