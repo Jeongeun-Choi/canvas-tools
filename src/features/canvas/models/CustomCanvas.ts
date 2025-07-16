@@ -22,7 +22,7 @@ class CustomCanvas {
     return this.ctx;
   }
 
-  get scale() {
+  get zoomScale() {
     return this.scaleVal;
   }
 
