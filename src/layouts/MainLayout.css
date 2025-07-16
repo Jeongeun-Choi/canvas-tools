@@ -5,6 +5,7 @@
   position: absolute;
   top: 48px;
   left: 302px;
+  z-index: 2;
 
   border: none;
 

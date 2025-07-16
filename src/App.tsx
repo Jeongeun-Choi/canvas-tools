@@ -3,8 +3,8 @@ import MainLayout from "./layouts/MainLayout";
 import CanvasView from "./features/canvas/components/CanvasView";
 import CustomCanvas from "./features/canvas/models/CustomCanvas";
 import { CustomCanvasContext } from "./features/canvas/contexts/context";
-import { useAtomValue } from "jotai";
-import { selectedPanelAtom } from "./atoms/panel/atom";
+import { useAtomValue, useSetAtom } from "jotai";
+import { resetSelectedPanelAtom, selectedPanelAtom } from "./atoms/panel/atom";
 import Rect from "./features/canvas/models/Rect";
 import Circle from "./features/canvas/models/Circle";
 
@@ -14,10 +14,10 @@ function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const selectedPanel = useAtomValue(selectedPanelAtom);
+  const resetSelectedPanel = useSetAtom(resetSelectedPanelAtom);
 
   useEffect(() => {
     if (canvasRef.current) {
-      console.log(new CustomCanvas(canvasRef.current));
       setCustomCanvas(new CustomCanvas(canvasRef.current));
     }
   }, []);
@@ -56,12 +56,13 @@ function App() {
         default:
           break;
       }
+      resetSelectedPanel();
     };
 
     canvas.addEventListener("click", handleClick);
 
     return () => canvas.removeEventListener("click", handleClick);
-  }, [customCanvas, selectedPanel]);
+  }, [customCanvas, resetSelectedPanel, selectedPanel]);
 
   return (
     <CustomCanvasContext.Provider value={{ customCanvas }}>

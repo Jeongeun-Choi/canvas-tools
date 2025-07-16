@@ -47,7 +47,6 @@ export default function MainLayout({ children }: PropsWithChildren) {
           {foldingLeftPanel ? "열어" : "접어"}
         </button>
         {children}
-        <div>오른쪽 패널</div>
       </section>
     </div>
   );
