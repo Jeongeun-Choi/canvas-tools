@@ -31,6 +31,16 @@ export default function GNB() {
           -
         </button>
       </section>
+      <section className="zoom-to-fit">
+        <button
+          onClick={() => {
+            console.log("zoom to fit");
+            customCanvas?.zoomToFit();
+          }}
+        >
+          zoom-to-fit
+        </button>
+      </section>
     </div>
   );
 }
