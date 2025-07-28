@@ -10,9 +10,9 @@ interface Shape {
 
 class CustomCanvas {
   ctx: CanvasRenderingContext2D | null;
-  shapeList: Map<string, Shape> = new Map();
   viewportTransform: DOMMatrix = new DOMMatrix();
   scaleVal: number = 1;
+  private _shapeList: Map<string, Shape> = new Map();
 
   constructor(canvas: HTMLCanvasElement) {
     this.ctx = canvas.getContext("2d");
@@ -26,13 +26,17 @@ class CustomCanvas {
     return this.scaleVal;
   }
 
+  get shapeList() {
+    return this._shapeList;
+  }
+
   add(shape: Shape) {
-    this.shapeList.set(shape.id, shape);
+    this._shapeList.set(shape.id, shape);
     this.redraw();
   }
 
   delete(shape: Shape) {
-    this.shapeList.delete(shape.id);
+    this._shapeList.delete(shape.id);
     this.redraw();
   }
 
@@ -68,10 +72,52 @@ class CustomCanvas {
     this.redraw();
   }
 
+  zoomToFit() {
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+
+    const panelWidth = 300;
+    const gnbWidth = 48;
+    const padding = 40;
+
+    this.shapeList.forEach((shape) => {
+      const tempMinX = shape.x;
+      const tempMinY = shape.y;
+      const tempMaxX = tempMinX + (shape.width || 0);
+      const tempMaxY = tempMinY + (shape.height || 0);
+
+      minX = Math.min(tempMinX, minX);
+      minY = Math.min(tempMinY, minY);
+      maxX = Math.max(tempMaxX, maxX);
+      maxY = Math.max(tempMaxY, maxY);
+    });
+
+    const canvasWidth = (this.ctx?.canvas.width || 0) - panelWidth;
+    const canvasHeight = (this.ctx?.canvas.height || 0) - gnbWidth;
+    const availableCanvasWidth = canvasWidth - padding * 2;
+    const availableCanvasHeight = canvasHeight - padding * 2;
+
+    const groupWidth = maxX - minX;
+    const groupHeight = maxY - minY;
+    const scaleX = availableCanvasWidth / groupWidth;
+    const scaleY = availableCanvasHeight / groupHeight;
+    const scale = Math.min(scaleX, scaleY);
+
+    const offsetX = (canvasWidth - groupWidth * scale) / 2 - minX * scale;
+    const offsetY = (canvasHeight - groupHeight * scale) / 2 - minY * scale;
+
+    this.ctx?.setTransform(scale, 0, 0, scale, offsetX + 300, offsetY);
+    this.clear();
+    this._shapeList.forEach((shape) => {
+      shape.draw(this.ctx);
+    });
+  }
   private redraw() {
     this.clear();
     this.ctx?.setTransform(this.viewportTransform);
-    this.shapeList.forEach((shape) => {
+    this._shapeList.forEach((shape) => {
       shape.draw(this.ctx);
     });
   }
