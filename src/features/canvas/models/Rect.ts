@@ -1,3 +1,5 @@
+import { screenToWorldWithPoint } from "../../../utils/transform";
+
 interface IRect {
   id: string;
   x: number;
@@ -36,6 +38,13 @@ class Rect {
   }
 
   draw(ctx: CanvasRenderingContext2D | null) {
+    const { x, y } = screenToWorldWithPoint(ctx, this.x, this.y);
+    this.x = x;
+    this.y = y;
+    ctx?.fillRect(x, y, this.width, this.height);
+  }
+
+  redraw(ctx: CanvasRenderingContext2D | null) {
     ctx?.fillRect(this.x, this.y, this.width, this.height);
   }
 }

@@ -6,6 +6,7 @@ interface Shape {
   width?: number;
   height?: number;
   draw: (ctx: CanvasRenderingContext2D | null) => void;
+  redraw: (ctx: CanvasRenderingContext2D | null) => void;
 }
 
 class CustomCanvas {
@@ -31,6 +32,7 @@ class CustomCanvas {
   }
 
   add(shape: Shape) {
+    shape.draw(this.ctx);
     this._shapeList.set(shape.id, shape);
     this.redraw();
   }
@@ -104,21 +106,24 @@ class CustomCanvas {
     const scaleX = availableCanvasWidth / groupWidth;
     const scaleY = availableCanvasHeight / groupHeight;
     const scale = Math.min(scaleX, scaleY);
-
     const offsetX = (canvasWidth - groupWidth * scale) / 2 - minX * scale;
     const offsetY = (canvasHeight - groupHeight * scale) / 2 - minY * scale;
 
-    this.ctx?.setTransform(scale, 0, 0, scale, offsetX + 300, offsetY);
+    this.ctx?.setTransform(scale, 0, 0, scale, offsetX + 300, offsetY + 40);
+
+    this.viewportTransform = this.ctx?.getTransform() || new DOMMatrix();
+
+    this.scaleVal = scale;
     this.clear();
     this._shapeList.forEach((shape) => {
-      shape.draw(this.ctx);
+      shape.redraw(this.ctx);
     });
   }
   private redraw() {
     this.clear();
     this.ctx?.setTransform(this.viewportTransform);
     this._shapeList.forEach((shape) => {
-      shape.draw(this.ctx);
+      shape.redraw(this.ctx);
     });
   }
 }
