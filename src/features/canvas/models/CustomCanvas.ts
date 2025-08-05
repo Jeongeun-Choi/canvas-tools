@@ -1,3 +1,8 @@
+import { screenToWorldWithPoint } from "../../../utils/transform";
+
+const panelWidth = 300;
+const padding = 40;
+
 interface Shape {
   type: "rect" | "circle" | string;
   id: string;
@@ -48,28 +53,40 @@ class CustomCanvas {
 
   zoomIn(x?: number, y?: number) {
     const canvas = document.getElementById("canvas-tools");
-    const cx = x || (canvas?.clientWidth || 0) / 2;
+    const cx = x || ((canvas?.clientWidth || 0) - panelWidth) / 2;
     const cy = y || (canvas?.clientHeight || 0) / 2;
 
+    const pt = screenToWorldWithPoint(this.ctx, cx, cy);
+
+    const prevScale = this.scaleVal;
     this.scaleVal += 0.1;
-    this.viewportTransform = new DOMMatrix()
-      .translate(cx, cy)
-      .scale(this.scaleVal)
-      .translate(-cx, -cy);
+
+    const factor = this.scaleVal / prevScale;
+
+    this.viewportTransform = this.viewportTransform
+      .translate(pt.x, pt.y)
+      .scale(factor)
+      .translate(-pt.x, -pt.y);
 
     this.redraw();
   }
 
   zoomOut(x?: number, y?: number) {
     const canvas = document.getElementById("canvas-tools");
-    const cx = x || (canvas?.clientWidth || 0) / 2;
+    const cx = x || (canvas?.clientWidth || 0 - panelWidth) / 2;
     const cy = y || (canvas?.clientHeight || 0) / 2;
 
+    const pt = screenToWorldWithPoint(this.ctx, cx, cy);
+
+    const prevScale = this.scaleVal;
     this.scaleVal -= 0.1;
-    this.viewportTransform = new DOMMatrix()
-      .translate(cx, cy)
-      .scale(this.scaleVal)
-      .translate(-cx, -cy);
+
+    const factor = this.scaleVal / prevScale;
+
+    this.viewportTransform = this.viewportTransform
+      .translate(pt.x, pt.y)
+      .scale(factor)
+      .translate(-pt.x, -pt.y);
 
     this.redraw();
   }
@@ -79,10 +96,6 @@ class CustomCanvas {
     let minY = Infinity;
     let maxX = -Infinity;
     let maxY = -Infinity;
-
-    const panelWidth = 300;
-    const gnbWidth = 48;
-    const padding = 40;
 
     this.shapeList.forEach((shape) => {
       const tempMinX = shape.x;
@@ -97,7 +110,7 @@ class CustomCanvas {
     });
 
     const canvasWidth = (this.ctx?.canvas.width || 0) - panelWidth;
-    const canvasHeight = (this.ctx?.canvas.height || 0) - gnbWidth;
+    const canvasHeight = this.ctx?.canvas.height || 0;
     const availableCanvasWidth = canvasWidth - padding * 2;
     const availableCanvasHeight = canvasHeight - padding * 2;
 
@@ -109,7 +122,7 @@ class CustomCanvas {
     const offsetX = (canvasWidth - groupWidth * scale) / 2 - minX * scale;
     const offsetY = (canvasHeight - groupHeight * scale) / 2 - minY * scale;
 
-    this.ctx?.setTransform(scale, 0, 0, scale, offsetX + 300, offsetY + 40);
+    this.ctx?.setTransform(scale, 0, 0, scale, offsetX + 300, offsetY);
 
     this.viewportTransform = this.ctx?.getTransform() || new DOMMatrix();
 
