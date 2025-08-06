@@ -1,4 +1,6 @@
 import { screenToWorldWithPoint } from "../../../utils/transform";
+import { zoomScaleAtom } from "../../../atoms/zoom/atom";
+import { store } from "../../../main";
 
 const panelWidth = 300;
 const padding = 40;
@@ -132,6 +134,42 @@ class CustomCanvas {
       shape.redraw(this.ctx);
     });
   }
+
+  zoomWheel = (event: WheelEvent) => {
+    event.preventDefault();
+
+    // 휠 방향에 따라 배율(factor) 결정
+    const wheel = event.deltaY < 0 ? 1.1 : 0.9;
+
+    // 마우스 위치 (캔버스 좌표)
+    const rect = this.ctx?.canvas.getBoundingClientRect();
+    const cx = event.clientX - (rect?.left || 0);
+    const cy = event.clientY - (rect?.top || 0);
+
+    const { x: wx, y: wy } = screenToWorldWithPoint(this.ctx, cx, cy);
+    this.scaleVal *= wheel;
+
+    const offsetX = cx - wx * this.scaleVal;
+    const offsetY = cy - wy * this.scaleVal;
+
+    store.set(zoomScaleAtom, this.scaleVal);
+
+    this.ctx?.setTransform(
+      this.scaleVal,
+      0,
+      0,
+      this.scaleVal,
+      offsetX,
+      offsetY
+    );
+
+    this.viewportTransform = this.ctx?.getTransform() || new DOMMatrix();
+    this.clear();
+    this._shapeList.forEach((shape) => {
+      shape.redraw(this.ctx);
+    });
+  };
+
   private redraw() {
     this.clear();
     this.ctx?.setTransform(this.viewportTransform);

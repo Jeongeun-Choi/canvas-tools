@@ -64,6 +64,15 @@ function App() {
     return () => canvas.removeEventListener("click", handleClick);
   }, [customCanvas, resetSelectedPanel, selectedPanel]);
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !customCanvas) return;
+
+    canvas.addEventListener("wheel", customCanvas.zoomWheel);
+
+    return () => canvas.removeEventListener("wheel", customCanvas.zoomWheel);
+  }, [customCanvas]);
+
   return (
     <CustomCanvasContext.Provider value={{ customCanvas }}>
       <MainLayout>

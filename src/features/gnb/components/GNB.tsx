@@ -1,11 +1,14 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
 import "../styles/GNB.css";
 import { CustomCanvasContext } from "../../canvas/contexts/context";
+import { setZoomScaleAtom, zoomScaleAtom } from "../../../atoms/zoom/atom";
 
 export default function GNB() {
-  const [zoomScale, setZoomScale] = useState(1);
-
   const { customCanvas } = useContext(CustomCanvasContext);
+
+  const zoomScale = useAtomValue(zoomScaleAtom);
+  const setZoomScale = useSetAtom(setZoomScaleAtom);
 
   return (
     <div id="GNB">
