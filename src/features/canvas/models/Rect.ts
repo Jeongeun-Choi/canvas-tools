@@ -19,16 +19,7 @@ class Rect {
   width: number;
   height: number;
   type: string;
-  constructor({
-    id,
-    x,
-    y,
-    width,
-    height,
-    type,
-    originX = "left",
-    originY = "top",
-  }: IRect) {
+  constructor({ id, x, y, width, height, type }: IRect) {
     this.id = id;
     this.x = x;
     this.y = y;
