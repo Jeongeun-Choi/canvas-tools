@@ -23,17 +23,7 @@ class Circle {
   fill: string;
   stroke: string;
 
-  constructor({
-    id,
-    x,
-    y,
-    type,
-    radius,
-    fill,
-    stroke,
-    originX = "left",
-    originY = "top",
-  }: CircleProps) {
+  constructor({ id, x, y, type, radius, fill, stroke }: CircleProps) {
     this.id = id;
     this.x = x + (radius || 50);
     this.y = y + (radius || 50);
