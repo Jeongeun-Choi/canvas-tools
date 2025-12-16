@@ -5,10 +5,7 @@ import "./MainLayout.css";
 import Panel from "../features/panel/components/Panel";
 import { setSelectedPanelAtom } from "../atoms/panel/atom";
 
-const componentList = [
-  { name: "Rect", type: "rect" },
-  { name: "Circle", type: "circle" },
-];
+const componentList = [{ name: "Rect", type: "rect" }];
 
 export default function MainLayout({ children }: PropsWithChildren) {
   const setSelectedPanel = useSetAtom(setSelectedPanelAtom);

@@ -6,7 +6,6 @@ import { CustomCanvasContext } from "./features/canvas/contexts/context";
 import { useAtomValue, useSetAtom } from "jotai";
 import { resetSelectedPanelAtom, selectedPanelAtom } from "./atoms/panel/atom";
 import Rect from "./features/canvas/models/Rect";
-import Circle from "./features/canvas/models/Circle";
 
 function App() {
   const [customCanvas, setCustomCanvas] = useState<CustomCanvas | null>(null);
@@ -43,16 +42,7 @@ function App() {
             })
           );
           break;
-        case "circle":
-          customCanvas?.add(
-            new Circle({
-              x,
-              y,
-              radius: 40,
-              id: window.crypto.randomUUID(),
-            })
-          );
-          break;
+
         default:
           break;
       }
